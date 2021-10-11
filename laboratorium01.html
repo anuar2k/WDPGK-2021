@@ -35,7 +35,7 @@
            var camera;
            var triangleMesh;
            var squareMesh;
-           var tree = [];
+           var tree;
 
            initializeScene();
 
@@ -54,9 +54,9 @@
                        }
                        geometry.faces[i].vertexColors[3] = new THREE.Color(colors[0]);
                    } else {
-                       geometry.faces[i].vertexColors[0] = new THREE.Color(colors[1]);
-                       geometry.faces[i].vertexColors[1] = new THREE.Color(colors[2]);
-                       geometry.faces[i].vertexColors[2] = new THREE.Color(colors[3]);
+                       geometry.faces[i].vertexColors[0] = new THREE.Color(colors[0]);
+                       geometry.faces[i].vertexColors[1] = new THREE.Color(colors[1]);
+                       geometry.faces[i].vertexColors[2] = new THREE.Color(colors[2]);
                    }
                }
            }
@@ -115,7 +115,7 @@
                    //side:THREE.DoubleSide
                });
 
-               var slicedConeGeometry = new THREE.CylinderGeometry(0.5, 1.5, 1.5, 50, false);
+               var slicedConeGeometry = new THREE.CylinderGeometry(0.5, 1.5, 1.5, 30, false);
                var treePartGeometry = slicedConeGeometry.clone();
                paintGeometry(treePartGeometry, [0x137300, 0x1e5913, 0x127a3a]);
 
@@ -124,12 +124,14 @@
                });
 
                var treePartMesh = new THREE.Mesh(treePartGeometry, treePartMaterial);
+               
+               tree = new THREE.Group();
                for (let i = 0; i < 3; i++) {
                    let treePart = treePartMesh.clone();
                    treePart.position.set(0.75, 1.5 * i, 0);
-                   tree.push(treePart);
+                   tree.add(treePart);
                }
-               tree.forEach(treePart => scene.add(treePart));
+               scene.add(tree);               
                
 
                squareMesh = new THREE.Mesh(squareGeometry, squareMaterial);
