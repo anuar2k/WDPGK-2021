@@ -124,7 +124,8 @@
                });
 
                var treePartMesh = new THREE.Mesh(treePartGeometry, treePartMaterial);
-               
+
+               // https://stackoverflow.com/questions/28848863/threejs-how-to-rotate-around-objects-own-center-instead-of-world-center               
                tree = new THREE.Group();
                for (let i = 0; i < 3; i++) {
                    let treePart = treePartMesh.clone();
@@ -142,9 +143,7 @@
            function animateScene(){
                triangleMesh.rotation.y += 0.1;
                squareMesh.rotation.x -= 0.075;
-               tree.forEach(treePart => {
-                   treePart.rotation.y += 0.01;
-               });
+               tree.rotation.y += 0.01;
                requestAnimationFrame(animateScene);
                renderScene();
            }
