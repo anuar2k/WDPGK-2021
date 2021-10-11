@@ -66,7 +66,7 @@
  
                  // Define camera and add it to the scene.
                  camera = new THREE.PerspectiveCamera(45, canvasWidth / canvasHeight, 1, 100);
-                 camera.position.set(0, 0, 10);
+                 camera.position.set(0, 0, 15);
                  camera.lookAt(scene.position);
                  scene.add(camera);
  
@@ -88,14 +88,14 @@
                  // performance optimization sometimes leads to wholes in the surface. When this happens
                  // in your surface, simply set 'doubleSided' to 'true'.
                  var triangleMaterial = new THREE.MeshBasicMaterial({
-                     color:0xFFFFFF,
+                     color:0xFF0000,
                      side:THREE.DoubleSide
                  });
  
                  // Create a mesh and insert the geometry and the material. Translate the whole mesh
                  // by -1.5 on the x axis and by 4 on the z axis. Finally add the mesh to the scene.
                  var triangleMesh = new THREE.Mesh(triangleGeometry, triangleMaterial);
-                 triangleMesh.position.set(-1.5, 0.0, 4.0);
+                 triangleMesh.position.set(-1, 1.0, 2.0);
                  scene.add(triangleMesh);
  
                  // The creation of the square is done in the same way as the triangle.
@@ -114,7 +114,7 @@
                  // Create a white basic material and activate the 'Doubleside' attribute 
 				 // (alternatives are: 'FrontSide' and 'BackSide')
                  var squareMaterial = new THREE.MeshBasicMaterial({
-                     color:0xFFFFFF,
+                     color:0x00FFFF,
                      side:THREE.DoubleSide
                  });
  
@@ -122,6 +122,8 @@
                  // by 1.5 on the x axis and by 4 on the z axis and add the mesh to the scene.
                  var squareMesh = new THREE.Mesh(squareGeometry, squareMaterial);
                  squareMesh.position.set(1.5, 0.0, 4.0);
+                 squareMesh.rotation.x += 15;
+                 squareMesh.rotation.y += 20;
                  scene.add(squareMesh);
              }
  
