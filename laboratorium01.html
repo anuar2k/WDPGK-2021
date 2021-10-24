@@ -37,6 +37,8 @@
            var squareMesh;
            var tree;
 
+           var smokeParticles = [];
+
            initializeScene();
 
            animateScene();
@@ -88,10 +90,7 @@
                triangleGeometry.vertices.push(new THREE.Vector3(-1.0, -1.0, 0.0));
                triangleGeometry.vertices.push(new THREE.Vector3( 1.0, -1.0, 0.0));
                triangleGeometry.faces.push(new THREE.Face3(0, 1, 2));
-
-               triangleGeometry.faces[0].vertexColors[0] = new THREE.Color(0xFF0000);
-               triangleGeometry.faces[0].vertexColors[1] = new THREE.Color(0x00FF00);
-               triangleGeometry.faces[0].vertexColors[2] = new THREE.Color(0x0000FF);
+               paintGeometry(triangleGeometry, [0xfc5603, 0xbd3200, 0xdb7c2e])
 
                var triangleMaterial = new THREE.MeshBasicMaterial({
                    vertexColors:THREE.VertexColors,
@@ -99,7 +98,7 @@
                });
 
                triangleMesh = new THREE.Mesh(triangleGeometry, triangleMaterial);
-               triangleMesh.position.set(-1.5, 0.0, 4.0);
+               triangleMesh.position.set(-1.5, 1, 4.0);
                scene.add(triangleMesh);
 
                var squareGeometry = new THREE.Geometry();
@@ -111,8 +110,8 @@
                squareGeometry.faces.push(new THREE.Face3(0, 2, 3));
 
                var squareMaterial = new THREE.MeshBasicMaterial({
-                   color:0x8080FF,
-                   //side:THREE.DoubleSide
+                   color:0x9796b3,
+                   side:THREE.DoubleSide
                });
 
                var slicedConeGeometry = new THREE.CylinderGeometry(0.5, 1.5, 1.5, 30, false);
@@ -124,33 +123,56 @@
                });
 
                var treePartMesh = new THREE.Mesh(treePartGeometry, treePartMaterial);
-
-               // https://stackoverflow.com/questions/28848863/threejs-how-to-rotate-around-objects-own-center-instead-of-world-center               
+           
                tree = new THREE.Group();
                for (let i = 0; i < 3; i++) {
                    let treePart = treePartMesh.clone();
-                   treePart.position.set(0.75, 1.5 * i, 0);
+                   treePart.position.set(0, 1.5 * i, 0);
                    tree.add(treePart);
                }
+               tree.position.set(2, -0.5, -4);
                scene.add(tree);               
                
 
                squareMesh = new THREE.Mesh(squareGeometry, squareMaterial);
-               squareMesh.position.set(1.5, 0.0, 4.0);
+               squareMesh.position.set(-1.5, -1.0, 4.0);
                scene.add(squareMesh);
-           }
+            }
 
-           function animateScene(){
-               triangleMesh.rotation.y += 0.1;
-               squareMesh.rotation.x -= 0.075;
-               tree.rotation.y += 0.01;
+            function animateScene(){
+            tree.rotation.y += 0.01;
+
+               var smokeParticle = new THREE.Mesh(new THREE.CircleGeometry(0.05,8), new THREE.MeshBasicMaterial( { color: 0xaaaaaa} ))
+
+               smokeParticles.push(smokeParticle)
+               smokeParticle.aParam = Math.random() * 20 + 30;
+               if (Math.random() > 0.5) {
+                   smokeParticle.aParam *= -1;
+               }
+               smokeParticle.step = 0;
+               smokeParticle.position.set(1, 1, 0);
+
+               const xBase = -1.4;
+
+               scene.add(smokeParticle);
+
+               if (smokeParticles.length > 40) {
+                   scene.remove(smokeParticles.shift());
+               }
+
+               for (particle of smokeParticles) {
+                   particle.step += 1;
+                   particle.position.y += 0.1;
+                   particle.position.x = xBase + Math.sqrt(particle.step) / particle.aParam;
+               }
+               
                requestAnimationFrame(animateScene);
                renderScene();
-           }
+            }
 
-           function renderScene(){
+            function renderScene(){
                renderer.render(scene, camera);
-           }
+            }
        </script>
      </body>
 </html>
